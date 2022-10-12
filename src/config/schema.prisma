@@ -1,0 +1,88 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["fieldReference"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model type_transaction {
+  id          Int    @id @default(autoincrement())
+  transaction String
+}
+
+model tbl_transaction {
+  id           Int         @id @default(autoincrement())
+  amont        String
+  origin_card  String
+  destiny_card String
+  date         DateTime    @default(now())
+  tbl_client   Int?
+  client       tbl_client? @relation(fields: [tbl_client], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model tbl_client {
+  id              Int               @id @default(autoincrement())
+  card_number     String            @unique
+  pin             String
+  balance         Float
+  email           String            @unique
+  updateAt        DateTime          @updatedAt
+  createAt        DateTime          @default(now())
+  tbl_user_ID     Int
+  tbl_user        tbl_user?         @relation(fields: [tbl_user_ID], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  tbl_transaction tbl_transaction[]
+}
+
+model tbl_user {
+  id            Int            @id @default(autoincrement())
+  username      String         @unique
+  recovery_code String?
+  tbl_person_ID Int?
+  tbl_role_ID   Int
+  tbl_person    tbl_person?     @relation(fields: [tbl_person_ID], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  tbl_role      tbl_role       @relation(fields: [tbl_role_ID], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  tbl_client    tbl_client[]
+  tbl_empleado  tbl_empleado[]
+}
+
+model tbl_role {
+  id       Int        @id @default(autoincrement())
+  role     String
+  tbl_user tbl_user[]
+}
+
+model tbl_person {
+  id                  Int        @id @default(autoincrement())
+  firts_name          String
+  last_name           String
+  type_identification String?
+  num_identification  String?
+  address             String?
+  email               String     @unique
+  phone1              String
+  city                String?
+  phone2              String?
+  fecha_nacimiento    DateTime?
+  gender              Int
+  tbl_gender          tbl_gender @relation(fields: [gender], references: [id])
+  tbl_user            tbl_user[]
+}
+
+model tbl_gender {
+  id         Int          @id @default(autoincrement())
+  gender     String
+  tbl_person tbl_person[]
+}
+
+model tbl_empleado {
+  id          Int      @id @default(autoincrement())
+  username    String
+  email       String   @unique
+  createAt    DateTime @default(now())
+  updateAt    DateTime @updatedAt
+  tbl_user_ID Int
+  tbl_user    tbl_user @relation(fields: [tbl_user_ID], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}

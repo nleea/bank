@@ -1,0 +1,288 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "Fintech Document App",
+        "description": "My Project Application API",
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        }
+    },
+    "host": "localhost:3001",
+    "basePath": "/",
+    "tags": [
+        {
+            "name": "Client",
+            "description": "API for client in the system"
+        },
+        {
+            "name": "Auth",
+            "description": "Api for client auth in the sistem"
+        }
+    ],
+    "schemes": ["http"],
+    "consumes": ["application/json"],
+    "produces": ["application/json"],
+    "components": {
+        "securitySchemes": {
+            "Authorization": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT",
+                "value": "Bearer <JWT token here>"
+            }
+        }
+    },
+    "paths": {
+        "/api/v1/auth/client/register/": {
+            "post": {
+                "tags": ["Auth"],
+                "description": "registrar el cliente en el sistema",
+                "summary": "Crear un cliente",
+                "security": {
+                    "Authorization": []
+                },
+                "parameters": [
+                    {
+                        "name": "client",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/registerClient"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "schema": {
+                            "$ref": "#/definitions/Client"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/client/profile/{id}": {
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "description": "Id para buscar el cliente",
+                    "type": "integer"
+                }
+            ],
+            "get": {
+                "tags": ["Client"],
+                "description": "Obbtener tus datos como cliente",
+                "summary": "Datos del cliente",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "schema": {
+                            "name": "data",
+                            "$ref": "#/definitions/Client"
+                        }
+                    },
+                    "401": {
+                        "description": "No permitido ya que no es el id de tu cliente"
+                    }
+                }
+            }
+        },
+        "/api/v1/client/update/{id}": {
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "description": "Id para buscar el cliente",
+                    "type": "integer"
+                }
+            ],
+            "patch": {
+                "tags": ["Client"],
+                "summary": "Actualizar un cliente",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "client",
+                        "description": "Ninguno de los campos son obligatorios, pero se debe enviar uno de los 3 campos",
+                        "schema": {
+                            "type": "object",
+                            "description": "Ninguno de los campos son obligatorios, pero se debe enviar uno de los 3 campos",
+                            "properties": {
+                                "email": {
+                                    "type": "string"
+                                },
+                                "pin": {
+                                    "type": "string"
+                                },
+                                "phone": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "schema": {
+                            "name": "data",
+                            "$ref": "#/definitions/Client"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/client/delete/{id}": {
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "description": "Id para buscar el cliente",
+                    "type": "integer"
+                }
+            ],
+            "delete": {
+                "tags": ["Client"],
+                "summary": "Borrar un cliete",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "message": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/auth/client/login/": {
+            "post": {
+                "tags": ["Auth"],
+                "summary": "Api para iniciar session",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "login",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "card_number": {
+                                    "type": "string"
+                                },
+                                "pin": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "token": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "Client": {
+            "properties": {
+                "firts_name": {
+                    "type": "string"
+                },
+                "last_name": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                },
+                "pin": {
+                    "type": "string"
+                },
+                "card_number": {
+                    "type": "string"
+                },
+                "balance": {
+                    "type": "number"
+                },
+                "role": {
+                    "type": "string"
+                },
+                "transaction": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "amount": {
+                                "type": "string"
+                            },
+                            "origin_card": {
+                                "type": "string"
+                            },
+                            "destiny_card": {
+                                "type": "string"
+                            },
+                            "date": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "registerClient": {
+            "required": [
+                "firts_name",
+                "last_name",
+                "email",
+                "phone",
+                "username",
+                "pin"
+            ],
+            "properties": {
+                "firts_name": {
+                    "type": "string"
+                },
+                "last_name": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                },
+                "pin": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

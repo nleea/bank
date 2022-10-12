@@ -1,0 +1,92 @@
+model type_transaction {
+  ID              Int               @id @default(autoincrement())
+  transaction     String            @db.VarChar(45)
+  tbl_transaction tbl_transaction[]
+}
+
+model tbl_client {
+  ID              Int               @id @default(autoincrement())
+  card_number     String?           @db.VarChar(45)
+  pin             String            @db.VarChar(4)
+  balance         String            @db.VarChar(45)
+  updateAt        String?           @db.VarChar(45)
+  createAt        String?           @db.VarChar(45)
+  tbl_user_ID     Int
+  tbl_user        tbl_user          @relation(fields: [tbl_user_ID], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "fk_tbl_client_tbl_user1")
+  tbl_transaction tbl_transaction[]
+
+  @@index([tbl_user_ID], map: "fk_tbl_client_tbl_user1_idx")
+}
+
+model tbl_empleado {
+  ID          Int      @id @default(autoincrement())
+  username    String   @db.VarChar(45)
+  email       String   @db.VarChar(45)
+  createAt    String   @db.VarChar(45)
+  updateAt    String   @db.VarChar(45)
+  tbl_user_ID Int
+  tbl_user    tbl_user @relation(fields: [tbl_user_ID], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "fk_tbl_empleado_tbl_user1")
+
+  @@index([tbl_user_ID], map: "fk_tbl_empleado_tbl_user1_idx")
+}
+
+model tbl_gender {
+  ID         Int          @id @default(autoincrement())
+  name       String       @db.VarChar(45)
+  tbl_person tbl_person[]
+}
+
+model tbl_person {
+  ID                  Int        @id @default(autoincrement())
+  firts_name          String
+  last_name           String
+  type_identification String?
+  num_identification  String?
+  address             String?
+  email               String
+  phone1              String
+  city                String?
+  phone2              String?
+  fecha_nacimiento    String?
+  gender              Int
+  tbl_gender          tbl_gender @relation(fields: [gender], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "fk_tbl_person_tbl_genero1")
+  tbl_user            tbl_user[]
+
+  @@index([gender], map: "fk_tbl_person_tbl_genero1_idx")
+}
+
+model tbl_role {
+  ID       Int        @id @default(autoincrement())
+  role     String     @db.VarChar(45)
+  tbl_user tbl_user[]
+}
+
+model tbl_transaction {
+  ID                                                 Int              @id @default(autoincrement())
+  amont                                              String           @db.VarChar(45)
+  origin_card                                        String           @db.VarChar(45)
+  destiny_card                                       String           @db.VarChar(45)
+  date                                               String           @db.VarChar(45)
+  type_transaction                                   Int
+  tbl_client                                         Int
+  tbl_client_tbl_clientTotbl_transaction             tbl_client       @relation(fields: [tbl_client], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "fk_tbl_transaction_tbl_client1")
+  type_transaction_tbl_transactionTotype_transaction type_transaction @relation(fields: [type_transaction], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "fk_tbl_transaction_type_transaction1")
+
+  @@index([tbl_client], map: "fk_tbl_transaction_tbl_client1_idx")
+  @@index([type_transaction], map: "fk_tbl_transaction_type_transaction1_idx")
+}
+
+model tbl_user {
+  ID            Int            @id @default(autoincrement())
+  username      String         @db.VarChar(45)
+  recovery_code String?        @db.VarChar(45)
+  tbl_person_ID Int
+  tbl_role_ID   Int
+  tbl_person    tbl_person     @relation(fields: [tbl_person_ID], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "fk_tbl_user_tbl_person1")
+  tbl_role      tbl_role       @relation(fields: [tbl_role_ID], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "fk_tbl_user_tbl_role1")
+  tbl_client    tbl_client[]
+  tbl_empleado  tbl_empleado[]
+
+  @@index([tbl_person_ID], map: "fk_tbl_user_tbl_person1_idx")
+  @@index([tbl_role_ID], map: "fk_tbl_user_tbl_role1_idx")
+}
