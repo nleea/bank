@@ -26,13 +26,13 @@ export const ClientMiddleware = async (
       return res.status(401).json({ message: "No Permited" });
     }
 
+    const tokenDecode = verify(token, process.env.SECRET_OR_KEY!) as any;
+
     const { id } = req.params;
 
     const client = await prisma.tbl_client.findUnique({
       where: { id: Number(id) },
     });
-
-    const tokenDecode = verify(token, process.env.SECRET_OR_KEY!) as any;
 
     if (!tokenDecode || !client) {
       return res.status(401).json({ message: "No Permited" });
