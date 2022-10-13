@@ -62,7 +62,7 @@ class AuthCases {
                                 },
                             },
                             tbl_role: {
-                                connect: { id: 1 },
+                                connect: { id: 2 },
                             },
                         },
                     },

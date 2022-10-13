@@ -20,11 +20,11 @@ const ClientMiddleware = async (req, res, next) => {
         if (!token) {
             return res.status(401).json({ message: "No Permited" });
         }
+        const tokenDecode = (0, jsonwebtoken_1.verify)(token, process.env.SECRET_OR_KEY);
         const { id } = req.params;
         const client = await module_middleware_1.prisma.tbl_client.findUnique({
             where: { id: Number(id) },
         });
-        const tokenDecode = (0, jsonwebtoken_1.verify)(token, process.env.SECRET_OR_KEY);
         if (!tokenDecode || !client) {
             return res.status(401).json({ message: "No Permited" });
         }
