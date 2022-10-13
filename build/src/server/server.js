@@ -29,7 +29,7 @@ class Server {
             explorer: true,
         };
         this.#app.use("/api/", new index_routes_1.IndexRouter().routes());
-        this.#app.use("/api-doc/", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swagger_json_1.default, options_));
+        this.#app.use("/api-doc/", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swagger_json_1.default));
     }
     listen() {
         this.#app.listen(this.#app.get("port"), () => {

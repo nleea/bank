@@ -31,7 +31,7 @@ export class Server {
     this.#app.use(
       "/api-doc/",
       SwaggerUi.serve,
-      SwaggerUi.setup(SwaggerDocument, options_)
+      SwaggerUi.setup(SwaggerDocument)
     );
   }
 
