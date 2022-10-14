@@ -10,6 +10,7 @@ const index_routes_1 = require("../routes/index.routes");
 const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 const swagger_json_1 = __importDefault(require("../../swagger.json"));
 const helmet_1 = __importDefault(require("helmet"));
+const cors_1 = __importDefault(require("cors"));
 class Server {
     #app;
     constructor() {
@@ -19,10 +20,11 @@ class Server {
     }
     #middleware() {
         this.#app.set("port", process.env.PORT || 3000);
+        this.#app.use((0, helmet_1.default)());
+        this.#app.use((0, cors_1.default)());
         this.#app.use(express_1.default.json());
         this.#app.use(express_1.default.urlencoded({ extended: false }));
         this.#app.use((0, morgan_1.default)("dev"));
-        this.#app.use((0, helmet_1.default)());
     }
     #routes() {
         var options_ = {

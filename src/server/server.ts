@@ -4,6 +4,7 @@ import { IndexRouter } from "../routes/index.routes";
 import SwaggerUi from "swagger-ui-express";
 import SwaggerDocument from "../../swagger.json";
 import helmet from "helmet";
+import cors from "cors";
 
 export class Server {
   #app: Application;
@@ -16,10 +17,11 @@ export class Server {
 
   #middleware() {
     this.#app.set("port", process.env.PORT || 3000);
+    this.#app.use(helmet());
+    this.#app.use(cors());
     this.#app.use(App.json());
     this.#app.use(App.urlencoded({ extended: false }));
     this.#app.use(morgan("dev"));
-    this.#app.use(helmet());
   }
 
   #routes() {
