@@ -21,7 +21,9 @@ class ClientRepository {
                             tbl_role: { select: { role: true } },
                         },
                     },
-                    tbl_transaction: true,
+                    tbl_transaction: {
+                        select: { amont: true, date: true, origin_card: true },
+                    },
                 },
             });
             if (!resp) {
@@ -68,8 +70,9 @@ class ClientRepository {
                     },
                 },
             });
+            const data_clean = (0, cleanData_1.CleanData)(resp, ['tbl_user_ID']);
             return {
-                data: resp,
+                data: data_clean,
             };
         }
         catch (error) {

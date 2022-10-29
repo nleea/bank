@@ -9,7 +9,7 @@
             "url": "https://opensource.org/licenses/MIT"
         }
     },
-    "host": "https://f-auvk.onrender.com",
+    "host": "localhost:3001",
     "basePath": "/",
     "tags": [
         {

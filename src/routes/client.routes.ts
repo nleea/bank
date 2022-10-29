@@ -18,6 +18,7 @@ export class ClientRoutes {
       ClientMiddleware,
       this.#controller.updateClient
     );
+
     router.delete(
       "/delete/:id",
       ClientMiddleware,

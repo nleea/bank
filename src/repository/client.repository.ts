@@ -33,13 +33,16 @@ export class ClientRepository {
               tbl_role: { select: { role: true } },
             },
           },
-          tbl_transaction: true,
+          tbl_transaction: {
+            select: { amont: true, date: true, origin_card: true },
+          },
         },
       });
 
       if (!resp) {
         return { message: "User Not found" };
       }
+
       let result = flattenObj(resp);
       let data = CleanData(
         result,
@@ -71,6 +74,7 @@ export class ClientRepository {
       const client = {
         email: body.email,
       };
+
       const person = { phone1: body.phone, email: body.email };
       if (body.pin) {
         client["pin"] = hashPin(body.pin).encrypted;
@@ -88,8 +92,10 @@ export class ClientRepository {
         },
       });
 
+      const data_clean = CleanData(resp,['tbl_user_ID'])
+
       return {
-        data: resp,
+        data: data_clean,
       };
     } catch (error) {
       return { message: error };
@@ -110,7 +116,7 @@ export class ClientRepository {
       }
       const personID = client?.tbl_user?.tbl_person?.id!;
       await this.#db.tbl_person.deleteMany({
-        where: { id: personID},
+        where: { id: personID },
       });
       return { message: "Ok" };
     } catch (error) {
