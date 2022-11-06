@@ -9,7 +9,7 @@
       "url": "https://opensource.org/licenses/MIT"
     }
   },
-  "host": "localhost:3001",
+  "host": "https://f-auvk.onrender.com",
   "basePath": "/",
   "tags": [
     {
@@ -66,16 +66,7 @@
         }
       }
     },
-    "/api/v1/client/profile/{id}": {
-      "parameters": [
-        {
-          "name": "id",
-          "in": "path",
-          "required": true,
-          "description": "Id para buscar el cliente",
-          "type": "integer"
-        }
-      ],
+    "/api/v1/client/profile/": {
       "get": {
         "tags": ["Client"],
         "description": "Obbtener tus datos como cliente",

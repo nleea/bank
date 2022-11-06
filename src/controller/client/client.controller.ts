@@ -13,8 +13,8 @@ export class ClientController {
   }
 
   getClient = async (req: Request, res: Response) => {
-    const { id } = req.params;
-    const resp = await this.#services.getClientInfo(Number(id));
+    const id = (req.user as any).id;
+    const resp = await this.#services.getClientInfo(id);
     res.status(200).json(resp);
   };
 

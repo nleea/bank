@@ -8,7 +8,7 @@ export class ClientServices {
   }
 
   async getClientInfo(id: number) {
-    const resp = await this.#clientService.getClient({ id: id });
+    const resp = await this.#clientService.getClient({ id: id }, true);
     return resp;
   }
 

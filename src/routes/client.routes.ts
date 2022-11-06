@@ -12,7 +12,7 @@ export class ClientRoutes {
   routes() {
     const router = Router({ mergeParams: true });
 
-    router.get("/profile/:id/", ClientMiddleware, this.#controller.getClient);
+    router.get("/profile/", ClientMiddleware, this.#controller.getClient);
     router.patch(
       "/update/:id",
       ClientMiddleware,

@@ -28,7 +28,16 @@ export class TransactioService {
             },
           },
         },
-        include: { tbl_transaction: true },
+        include: {
+          tbl_transaction: {
+            select: {
+              amont: true,
+              origin_card: true,
+              date: true,
+              destiny_card: true,
+            },
+          },
+        },
       });
       await this.#db.tbl_client.update({
         where: { card_number: data.destiny_card },

@@ -5,6 +5,7 @@ import { ClientModel } from "../usesCases.module";
 import CreditGenerator from "creditcard-generator";
 import { Prisma, prisma, PrismaClient } from "../../database/db";
 import { comparePin, hashPin } from "../../helpers/bcrypt";
+import { CleanData } from "../../helpers/cleanData";
 
 export class AuthCases {
   #clientRepository: ClientRepository = new ClientRepository();
@@ -37,10 +38,11 @@ export class AuthCases {
         process.env.SECRET_OR_KEY!,
         { expiresIn: "1d" }
       );
-      return { token };
-    } catch (error) {
+
+      return { token, client: client.data.id, IsAuth: true };
+    } catch (error: any) {
       return {
-        message: error,
+        message: error.message,
       };
     }
   }

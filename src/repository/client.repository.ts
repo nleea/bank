@@ -20,7 +20,7 @@ export class ClientRepository {
     this.#db = prisma;
   }
 
-  async getClient(props: props) {
+  async getClient(props: props, pin: boolean = false) {
     try {
       const resp = await this.#db.tbl_client.findUnique({
         where: { card_number: props.card_number, id: props.id },
@@ -34,7 +34,12 @@ export class ClientRepository {
             },
           },
           tbl_transaction: {
-            select: { amont: true, date: true, origin_card: true },
+            select: {
+              amont: true,
+              date: true,
+              origin_card: true,
+              destiny_card: true,
+            },
           },
         },
       });
@@ -53,7 +58,7 @@ export class ClientRepository {
           "firts_name",
           "last_name",
           "gender",
-          "id",
+          pin ? "pin" : "",
           "origin_card",
           "destiny_card",
           "tbl_client",
@@ -92,7 +97,7 @@ export class ClientRepository {
         },
       });
 
-      const data_clean = CleanData(resp,['tbl_user_ID'])
+      const data_clean = CleanData(resp, ["tbl_user_ID"]);
 
       return {
         data: data_clean,

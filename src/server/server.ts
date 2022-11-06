@@ -1,4 +1,5 @@
 import App, { Application } from "express";
+import session from "express-session";
 import morgan from "morgan";
 import { IndexRouter } from "../routes/index.routes";
 import SwaggerUi from "swagger-ui-express";
@@ -17,6 +18,14 @@ export class Server {
 
   #middleware() {
     this.#app.set("port", process.env.PORT || 3000);
+    this.#app.use(
+      session({
+        resave: true,
+        secret: process.env.SECRET_OR_KEY!,
+        saveUninitialized: true,
+        cookie: { secure: true },
+      })
+    );
     this.#app.use(helmet());
     this.#app.use(cors());
     this.#app.use(App.json());
@@ -25,10 +34,6 @@ export class Server {
   }
 
   #routes() {
-    var options_ = {
-      explorer: true,
-    };
-
     this.#app.use("/api/", new IndexRouter().routes());
     this.#app.use(
       "/api-doc/",
