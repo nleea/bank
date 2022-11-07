@@ -8,7 +8,7 @@ class ClientServices {
         this.#clientService = new usesCases_module_1.ClientRepository();
     }
     async getClientInfo(id) {
-        const resp = await this.#clientService.getClient({ id: id });
+        const resp = await this.#clientService.getClient({ id: id }, true);
         return resp;
     }
     async patchClient(id, body) {

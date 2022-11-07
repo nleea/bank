@@ -31,11 +31,11 @@ class AuthCases {
                 username: client.data.username,
                 rol: client.data.rol,
             }, process.env.SECRET_OR_KEY, { expiresIn: "1d" });
-            return { token };
+            return { token, client: client.data.id, IsAuth: true };
         }
         catch (error) {
             return {
-                message: error,
+                message: error.message,
             };
         }
     }

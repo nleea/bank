@@ -8,7 +8,7 @@ class ClientRepository {
     constructor() {
         this.#db = modules_repository_1.prisma;
     }
-    async getClient(props) {
+    async getClient(props, pin = false) {
         try {
             const resp = await this.#db.tbl_client.findUnique({
                 where: { card_number: props.card_number, id: props.id },
@@ -22,7 +22,12 @@ class ClientRepository {
                         },
                     },
                     tbl_transaction: {
-                        select: { amont: true, date: true, origin_card: true },
+                        select: {
+                            amont: true,
+                            date: true,
+                            origin_card: true,
+                            destiny_card: true,
+                        },
                     },
                 },
             });
@@ -37,7 +42,7 @@ class ClientRepository {
                 "firts_name",
                 "last_name",
                 "gender",
-                "id",
+                pin ? "pin" : "",
                 "origin_card",
                 "destiny_card",
                 "tbl_client",
@@ -70,7 +75,7 @@ class ClientRepository {
                     },
                 },
             });
-            const data_clean = (0, cleanData_1.CleanData)(resp, ['tbl_user_ID']);
+            const data_clean = (0, cleanData_1.CleanData)(resp, ["tbl_user_ID"]);
             return {
                 data: data_clean,
             };

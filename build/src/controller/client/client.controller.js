@@ -8,8 +8,8 @@ class ClientController {
         this.#services = new conteroller_module_1.ClientServices();
     }
     getClient = async (req, res) => {
-        const { id } = req.params;
-        const resp = await this.#services.getClientInfo(Number(id));
+        const id = req.user.id;
+        const resp = await this.#services.getClientInfo(id);
         res.status(200).json(resp);
     };
     updateClient = async (req, res) => {

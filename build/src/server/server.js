@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Server = void 0;
 const express_1 = __importDefault(require("express"));
+const express_session_1 = __importDefault(require("express-session"));
 const morgan_1 = __importDefault(require("morgan"));
 const index_routes_1 = require("../routes/index.routes");
 const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
@@ -20,6 +21,12 @@ class Server {
     }
     #middleware() {
         this.#app.set("port", process.env.PORT || 3000);
+        this.#app.use((0, express_session_1.default)({
+            resave: true,
+            secret: process.env.SECRET_OR_KEY,
+            saveUninitialized: true,
+            cookie: { secure: true },
+        }));
         this.#app.use((0, helmet_1.default)());
         this.#app.use((0, cors_1.default)());
         this.#app.use(express_1.default.json());
@@ -27,9 +34,6 @@ class Server {
         this.#app.use((0, morgan_1.default)("dev"));
     }
     #routes() {
-        var options_ = {
-            explorer: true,
-        };
         this.#app.use("/api/", new index_routes_1.IndexRouter().routes());
         this.#app.use("/api-doc/", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swagger_json_1.default));
     }

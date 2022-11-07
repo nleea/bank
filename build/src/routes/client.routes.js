@@ -11,7 +11,7 @@ class ClientRoutes {
     }
     routes() {
         const router = (0, module_routes_1.Router)({ mergeParams: true });
-        router.get("/profile/:id/", client_middleware_1.ClientMiddleware, this.#controller.getClient);
+        router.get("/profile/", client_middleware_1.ClientMiddleware, this.#controller.getClient);
         router.patch("/update/:id", client_middleware_1.ClientMiddleware, this.#controller.updateClient);
         router.delete("/delete/:id", client_middleware_1.ClientMiddleware, this.#controller.deleteClient);
         return router;
