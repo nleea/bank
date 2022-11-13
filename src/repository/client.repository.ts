@@ -6,6 +6,7 @@ import {
 } from "./modules.repository";
 import { CleanData } from "../helpers/cleanData";
 import { UpdateClientModel } from "../models/client.model";
+import { Prisma } from "../database/db";
 
 interface props {
   id?: number;
@@ -44,8 +45,9 @@ export class ClientRepository {
         },
       });
 
+
       if (!resp) {
-        return { message: "User Not found" };
+        return { data: { message: "User Not found" }, code: 404 };
       }
 
       let result = flattenObj(resp);
@@ -58,6 +60,7 @@ export class ClientRepository {
           "firts_name",
           "last_name",
           "gender",
+          "id",
           pin ? "pin" : "",
           "origin_card",
           "destiny_card",
@@ -67,10 +70,14 @@ export class ClientRepository {
       );
 
       return {
-        data: { ...data, transaction: resp.tbl_transaction },
+        data: { ...data, id: resp.id, transaction: resp.tbl_transaction },
+        code: 200,
       };
     } catch (error) {
-      return { message: error };
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        return { data: { message: error.cause }, code: 404 };
+      }
+      return { data: { message: error }, code: 400 };
     }
   }
 
@@ -100,10 +107,13 @@ export class ClientRepository {
       const data_clean = CleanData(resp, ["tbl_user_ID"]);
 
       return {
-        data: data_clean,
+        data: {
+          data_clean,
+        },
+        code: 200,
       };
     } catch (error) {
-      return { message: error };
+      return { data: { message: error }, code: 400 };
     }
   }
 
@@ -117,15 +127,15 @@ export class ClientRepository {
       });
 
       if (!client) {
-        return { message: "User Not Found" };
+        return { data: { message: "User Not Found" }, code: 404 };
       }
       const personID = client?.tbl_user?.tbl_person?.id!;
       await this.#db.tbl_person.deleteMany({
         where: { id: personID },
       });
-      return { message: "Ok" };
+      return { data: { message: "Ok" }, code: 200 };
     } catch (error) {
-      return { message: error };
+      return { data: { message: error }, code: 400 };
     }
   }
 }

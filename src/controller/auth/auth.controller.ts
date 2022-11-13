@@ -12,12 +12,12 @@ export class AuthController {
   register = async (req: Request, res: Response) => {
     const body = req.body as ClientModel;
     const resp = await this.#authServices.register(body);
-    return res.status(200).json(resp);
+    return res.status(resp.code).json(resp.data);
   };
 
   login = async (req: Request, res: Response) => {
     const body = req.body as AuthModel;
     const resp = await this.#authServices.authClient(body);
-    return res.status(200).json(resp);
+    return res.status(resp.code).json(resp.data);
   };
 }
