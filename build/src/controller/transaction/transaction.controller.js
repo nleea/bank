@@ -16,12 +16,12 @@ class TransactionController {
             origin_card: globalUser.card_number,
         };
         const resp = await this.#transactionRespository.postTransaction(body);
-        return res.status(200).json(resp);
+        return res.status(resp.code).json(resp.data);
     };
     deleteTransaction = async (req, res) => {
         const { id } = req.params;
         const resp = await this.#transactionRespository.deleteTransaction(Number(id));
-        return res.status(200).json(resp);
+        return res.status(resp.code).json(resp.data);
     };
 }
 exports.TransactionController = TransactionController;

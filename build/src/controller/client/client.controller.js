@@ -10,18 +10,18 @@ class ClientController {
     getClient = async (req, res) => {
         const id = req.user.id;
         const resp = await this.#services.getClientInfo(id);
-        res.status(200).json(resp);
+        res.status(resp.code).json(resp.data);
     };
     updateClient = async (req, res) => {
         const { id } = req.params;
         const body = req.body;
         const resp = await this.#services.patchClient(Number(id), body);
-        res.status(200).json(resp);
+        res.status(resp.code).json(resp.data);
     };
     deleteClient = async (req, res) => {
         const { id } = req.params;
         const resp = await this.#services.deleteClient(Number(id));
-        res.status(200).json(resp);
+        res.status(resp.code).json(resp.data);
     };
 }
 exports.ClientController = ClientController;

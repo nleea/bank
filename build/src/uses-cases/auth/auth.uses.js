@@ -20,22 +20,28 @@ class AuthCases {
             const client = await this.#clientRepository.getClient({
                 card_number: body.card_number,
             });
-            if (!client) {
-                return { message: "Client Not Found" };
+            if ('message' in client.data) {
+                return { data: { message: "Client Not Found" }, code: 404 };
             }
             if (!(0, bcrypt_1.comparePin)(body.pin, client.data.pin)) {
-                return { message: "Password do not match" };
+                return { data: { message: "Password do not match" }, code: 404 };
             }
             const token = (0, jsonwebtoken_1.sign)({
                 email: client.data.email,
                 username: client.data.username,
                 rol: client.data.rol,
             }, process.env.SECRET_OR_KEY, { expiresIn: "1d" });
-            return { token, client: client.data.id, IsAuth: true };
+            return {
+                data: { token, client: client.data.id, IsAuth: true },
+                code: 200,
+            };
         }
         catch (error) {
             return {
-                message: error.message,
+                data: {
+                    message: error.message,
+                },
+                code: 400,
             };
         }
     }
@@ -75,25 +81,31 @@ class AuthCases {
                     },
                 },
             });
-            return client;
+            return { data: client, code: 200 };
         }
         catch (error) {
             if (error instanceof db_1.Prisma.PrismaClientKnownRequestError) {
                 return {
-                    message: `Unique constraint failed on the ${error.meta.target
-                        ? error.meta.target
-                        : error.meta.cause}`,
+                    data: {
+                        message: `Unique constraint failed on the ${error.meta.target
+                            ? error.meta.target
+                            : error.meta.cause}`,
+                    },
+                    code: 400,
                 };
             }
             if (error instanceof db_1.Prisma.PrismaClientUnknownRequestError) {
                 return {
-                    message: `Unique constraint failed on the ${error.name}`,
+                    data: {
+                        message: `Unique constraint failed on the ${error.name}`,
+                    },
+                    code: 400,
                 };
             }
             if (error instanceof db_1.Prisma.PrismaClientValidationError) {
-                return { message: error.message.split("\n")[20] };
+                return { data: { message: error.message.split("\n")[20] }, code: 400 };
             }
-            return { message: "Error" };
+            return { data: { message: "Error" }, code: 400 };
         }
     }
 }

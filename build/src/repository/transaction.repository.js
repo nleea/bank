@@ -13,7 +13,7 @@ class TransactioService {
                 where: { card_number: data.origin_card },
             });
             if (!client || client?.balance < Number(data.amont)) {
-                return { message: "Transaction canceled" };
+                return { data: { message: "Transaction canceled" }, code: 200 };
             }
             const resp = await this.#db.tbl_client.update({
                 where: { id: client.id },
@@ -46,21 +46,19 @@ class TransactioService {
                     },
                 },
             });
-            return {
-                data: resp.tbl_transaction,
-            };
+            return { data: resp.tbl_transaction, code: 200 };
         }
         catch (error) {
-            return { message: error };
+            return { data: { message: error }, code: 400 };
         }
     }
     async deleteTransaction(id) {
         try {
             await this.#db.tbl_transaction.delete({ where: { id: id } });
-            return { message: "Ok" };
+            return { data: { message: "Ok" }, code: 200 };
         }
         catch (error) {
-            return { message: error };
+            return { data: { message: error }, code: 400 };
         }
     }
 }
